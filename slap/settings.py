@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'slapapp',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +82,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+#FACEBOOK_APP_ID = '1529719137268268'
+#FACEBOOK_SECRET_KEY = 'a766cd5d2fb5cc2d1a744d816b242ab6'
+#AUTH_PROFILE_MODULE = 'profiles.profile'
