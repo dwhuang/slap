@@ -111,5 +111,24 @@
 <div id="status">
 </div>
 
+<h3>測試留言</h3>
+
+<input type="text" id="myComment" value="想說的話...">
+
+<button onclick="showComment()">顯示</button>
+
+<div id="demo"></div>
+<div id="user"></div>
+<script>
+function showComment() {
+    var x = document.getElementById("myComment").value;
+    document.getElementById("demo").innerHTML = x;
+    FB.api('/me', function(response) {
+      //console.log('Successful login for: ' + response.name);
+      document.getElementById('user').innerHTML = '來自使用者' + response.name + ',編號'+ response.id;
+    });
+}
+</script>
+
 </body>
 </html>
