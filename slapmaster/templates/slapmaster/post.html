@@ -1,0 +1,19 @@
+{% if post %}
+url=<a href="{{post.news_url}}">{{post.news_url}}</a><br/> 
+reason={{post.reason}}<br/> 
+time={{post.time}}<br/>
+vote={{post.vote}}<br/>
+views={{post.views}}<br/>
+{% endif %}
+
+
+<h1>add response</h1>
+
+<form action="{% url 'addpost' %}" method="post">
+{% csrf_token %}
+<label for="news_url">新聞連結</label><br/>
+<input type="text" name="news_url" id="news_url"><br/>
+<label for="reason">簡述欠打原因</label><br/>
+<input type="text" name="reason" id="reason"><br/>
+<input type="submit" value="送出"/>
+</form>

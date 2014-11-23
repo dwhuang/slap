@@ -4,5 +4,7 @@ from slapmaster import views
 
 urlpatterns = patterns('',
         url(r'^$', views.allposts, name='allposts'),
-        url(r'^post/', views.post, name='post'),
+        url(r'^post/(?P<post_id>\d+)/$', views.post, name='post'),
+        url(r'^addpost/$', views.addpost, name='addpost'),
+        url(r'^addresponse/$', views.addpost, name='addpost'),
         )
