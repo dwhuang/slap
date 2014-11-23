@@ -2,7 +2,7 @@
 {% load cache %}
 
 {% cache 240 "recent-posts" %}
-    <div class="head">Recent Replies</div>
+    <div class="head">最近回覆 (Recent Replies)</div>
     <div class="recent-posts">
         <ul>
             {% for post in posts %}

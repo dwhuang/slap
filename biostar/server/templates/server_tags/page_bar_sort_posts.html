@@ -21,20 +21,20 @@
 
         <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&limit={{ limit }}&q={{ q }}">&lt;prev</a>
+            <a href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&limit={{ limit }}&q={{ q }}">&lt;上一頁</a>
         {% else %}
-            &lt;prev
+            &lt;上一頁
         {% endif %}
 
             <span class="current">
-              &bull; {{ page_obj.paginator.count|intcomma }} results &bull;
-                page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }} &bull;
+              &bull; 共有 {{ page_obj.paginator.count|intcomma }} 結果 &bull;
+                第 {{ page_obj.number }} 頁，共 {{ page_obj.paginator.num_pages }} 頁 &bull;
         </span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&limit={{ limit }}&q={{ q }}">next &gt;</a>
+            <a href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&limit={{ limit }}&q={{ q }}">下一頁&gt;</a>
             {% else %}
-                next &gt;
+                下一頁 &gt;
             {% endif %}
         </span>
     </div>

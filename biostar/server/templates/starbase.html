@@ -100,20 +100,20 @@
         <div class="row toc">
 
             <div class="col-xs-3 col-xs-offset-1 col-md-2 col-md-offset-3">
-                <div class="title">Content</div>
+                <div class="title">內容</div>
                 <ul class="flat">
-                    <li><a href="{% url 'search-page' %}">Search</a></li>
-                    <li><a href="{% url 'user-list' %}">Users</a></li>
-                    <li><a href="{% url 'tag-list' %}">Tags</a></li>
-                    <li><a href="{% url 'badge-list' %}">Badges</a></li>
+                    <li><a href="{% url 'search-page' %}">搜索</a></li>
+                    <li><a href="{% url 'user-list' %}">其他使用者</a></li>
+                    <li><a href="{% url 'tag-list' %}">標籤</a></li>
+                    <li><a href="{% url 'badge-list' %}">勳章</a></li>
                 </ul>
             </div>
 
             <div class="col-xs-3 col-md-2">
-                <div class="title">Help</div>
+                <div class="title">需要幫助？</div>
                 <ul class="flat">
-                    <li><a href="{% url 'flatpage' 'about' %}">About</a></li>
-                    <li><a href="{% url 'flatpage' 'faq' %}">FAQ</a></li>
+                    <li><a href="{% url 'flatpage' 'about' %}">關於我們</a></li>
+                    <li><a href="{% url 'flatpage' 'faq' %}">常見問題</a></li>
                 </ul>
             </div>
 
@@ -148,7 +148,7 @@
     {% endblock %}
 
     {# This information is cached and updated periodically via the context. #}
-    <div id="traffic">Traffic: {{ TRAFFIC }} users visited in the last hour</div>
+    <div id="traffic">流量: 在這一小時內，共有 {{ TRAFFIC }} 個使用者來訪。</div>
 
 </div>
 

@@ -23,12 +23,13 @@ START_CATEGORIES = [
 
 # These should be the most frequent (or special) tags on the site.
 NAVBAR_TAGS = [
-    "RNA-Seq", "ChIP-Seq", "SNP", "Assembly",
+#    "RNA-Seq", "ChIP-Seq", "SNP", "Assembly",
 ]
 
 # The last categories. These tags have special meaning internally.
 END_CATEGORIES = [
-    "Tutorials", "Tools",  "Jobs", "Forum",
+    "導覽", "工具",  "職缺", "論壇",
+    #"Tutorials", "Tools",  "Jobs", "Forum",
 ]
 
 # These are the tags that always show up in the tag recommendation dropdown.

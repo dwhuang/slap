@@ -176,8 +176,8 @@
             <div class="col-md-9 top text-center">
                 {%  include "site_description.html" %}
                 <span class="pull-right">
-                    <a href="{% url 'flatpage' 'about' %}">about</a> &bull; <a href="{% url 'flatpage' 'faq' %}">faq</a>
-                    &bull; <a href="{% url 'rss' %}">rss <i class="fa fa-rss"></i></a>
+                    <a href="{% url 'flatpage' 'about' %}">關於我們</a> &bull; <a href="{% url 'flatpage' 'faq' %}">常見問題</a>
+                    &bull; <a href="{% url 'rss' %}">RSS <i class="fa fa-rss"></i></a>
                 </span>
             </div>
 
@@ -185,21 +185,21 @@
                 <a href="{% url 'user-list' %}">
                     <div><i class="fa fa-globe"></i>
                     </div>
-                    <div>Community</div>
+                    <div>社群</div>
                 </a>
             </div>
 
             <div class="col-md-2 mid {% current request 'account_login' %}">
                 <b><a href="{% url 'login' %}">
                     <div><i class="fa fa-user fa-1x"></i></div>
-                    <div>User Login</div>
+                    <div>用戶登入</div>
                 </a></b>
             </div>
 
             <div class="col-md-2 mid newpost">
                 <a href="{% url 'new-post' %}" class="navitem ">
                     <div><i class="fa fa-plus-circle fa-1x"></i></div>
-                    <div>New Post</div>
+                    <div>發表新文章</div>
                 </a>
             </div>
 
