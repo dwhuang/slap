@@ -1,0 +1,11 @@
+<h1>hello world</h1>
+
+{% if all_posts %}
+    <ul>
+    {% for post in all_posts %}
+        <li>{{ post.id }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>no posts are available</p>
+{% endif %}
