@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '023ebdkha^jrv8)s#jcqcva$@salmq%5h#-#e2jy@5pbpy(6i7'
+SECRET_KEY = 'tahiqyhf$9$hd#itdl7oe3mka2d+ub9(h241f7#a-hz3pfkb!v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'slapapp',
+    'slapmaster',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -82,8 +82,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
-#FACEBOOK_APP_ID = '1529719137268268'
-#FACEBOOK_SECRET_KEY = 'a766cd5d2fb5cc2d1a744d816b242ab6'
-#AUTH_PROFILE_MODULE = 'profiles.profile'
