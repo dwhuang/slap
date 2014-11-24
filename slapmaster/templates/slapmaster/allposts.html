@@ -3,7 +3,7 @@
 {% if all_posts %}
     <ul>
     {% for post in all_posts %}
-    <li>id={{post.id}}<br/> 
+    <li><a href={% url 'post' post.id %}>id={{post.id}}<br/> 
     url=<a href="{{post.news_url}}">{{post.news_url}}</a><br/> 
     reason={{post.reason}}<br/> 
     time={{post.time}}<br/>

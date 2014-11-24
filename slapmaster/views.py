@@ -12,7 +12,8 @@ def allposts(request):
 
 def post(request, post_id):
     post = Post.objects.get(id=post_id)
-    context = { 'post': post }
+    response_list = Response.objects.filter(original_post=post_id)
+    context = { 'post': post, 'response_list': response_list }
     return render(request, 'slapmaster/post.html', context)
 
 def addpost(request):
@@ -24,3 +25,15 @@ def addpost(request):
         return HttpResponseRedirect(reverse('allposts'))
     except:
         return HttpResponse(sys.exc_info()[0])
+
+def addresponse(request):
+    try:
+        post_id = request.POST['post_id']
+        response_text = request.POST['response_text']
+        r = Post.objects.get(id=post_id).response_set.create(
+                response_text=response_text)
+        r.save()
+        return HttpResponseRedirect(reverse('post', args=(post_id,)))
+    except:
+        return HttpResponse(sys.exc_info()[0])
+
