@@ -1,24 +1,25 @@
 *.pyc
 *~
 .DS_Store
-.idea/*
-/import/*
-/live/*
-/conf/*.env
-/docs/_build
+
+#.idea/*
+#/import/*
+#/live/*
+#/conf/*.env
+#/docs/_build
 
 # Common machine-specific settings files.
-biostar/settings/local*.py
-biostar/settings/production*.py
-biostar/settings/staging*.py
-biostar/settings/test*.py
+biostar/biostar/settings/local*.py
+biostar/biostar/settings/production*.py
+biostar/biostar/settings/staging*.py
+biostar/biostar/settings/test*.py
 
 # Common machine-specific requirements files.
-conf/requirements/local*.txt
-conf/requirements/production*.txt
-conf/requirements/staging*.txt
-conf/requirements/test*.txt
+biostar/conf/requirements/local*.txt
+biostar/conf/requirements/production*.txt
+biostar/conf/requirements/staging*.txt
+biostar/conf/requirements/test*.txt
 
 # Common machine-specific logger files.
-biostar/settings/logger_*.py
-slap
+biostar/biostar/settings/logger_*.py
+
