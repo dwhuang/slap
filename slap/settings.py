@@ -49,6 +49,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+   # for accessing request.session in templates
+   'django.core.context_processors.request', 
+   'django.contrib.auth.context_processors.auth',
+)
+
 ROOT_URLCONF = 'slap.urls'
 
 WSGI_APPLICATION = 'slap.wsgi.application'

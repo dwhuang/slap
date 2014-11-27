@@ -2,19 +2,13 @@ import sys
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.views import generic
+from authomatic import Authomatic
+from authomatic.adapters import DjangoAdapter
 
 from slapmaster.models import Post, Response
-
-def allposts(request):
-    all_posts = Post.objects.all()
-    context = { 'all_posts': all_posts }
-    return render(request, 'slapmaster/allposts.html', context)
-
-def post(request, post_id):
-    post = Post.objects.get(id=post_id)
-    response_list = Response.objects.filter(original_post=post_id)
-    context = { 'post': post, 'response_list': response_list }
-    return render(request, 'slapmaster/post.html', context)
+from slapmaster.config import AUTHOMATIC_CONFIG
+authomatic = Authomatic(AUTHOMATIC_CONFIG, 'gadf48t7vhzv0-42djcajhdslapit')
 
 def addpost(request):
     try:
@@ -37,3 +31,67 @@ def addresponse(request):
     except:
         return HttpResponse(sys.exc_info()[0])
 
+def fb_login(request):
+    response = HttpResponse()
+    result = authomatic.login(DjangoAdapter(request, response), 'fb')
+    if not result:
+        response.write("cannot get login result")
+        return response
+    if result.error:
+        response.write(result.error.message)
+        return response
+    if not result.user:
+        response.write("login result does not contain user info")
+        return response
+
+    if not (result.user.name and result.user.id):
+        result.user.update()
+    request.session['credentials'] = result.user.credentials.serialize()
+    request.session['username'] = result.user.name
+    request.session['userid'] = result.user.id
+    request.session['useremail'] = result.user.email
+    return HttpResponseRedirect(reverse('post_list'))
+
+def logout(request):
+    request.session.pop("credentials", None)
+    request.session.pop("username", None)
+    request.session.pop("userid", None)
+    request.session.pop("useremail", None)
+    return HttpResponseRedirect(reverse('post_list'))
+
+def validate_user_credentials(session):
+    if not session.has_key('credentials'):
+        return False
+    credentials = authomatic.credentials(session['credentials'])
+    if not credentials.valid:
+        session.pop("credentials", None)
+        session.pop("username", None)
+        session.pop("userid", None)
+        session.pop("useremail", None)
+        return False
+    if credentials.expire_soon(60 * 60 * 24): # expiring in a day
+        credentials.refresh()
+        session['credentials'] = credentials.serialize()
+    return True
+
+class IndexView(generic.ListView):
+    model = Post
+    context_object_name = 'post_list'
+    template_name = 'slapmaster/post_list.html'
+
+    def get_context_data(self, **kwargs):
+        validate_user_credentials(self.request.session)
+        context = super(IndexView, self).get_context_data(**kwargs)
+        return context
+
+class DetailView(generic.DetailView):
+    model = Post
+    context_object_name = 'post'
+    template_name = 'slapmaster/post_detail.html'
+
+    def get_context_data(self, **kwargs):
+        validate_user_credentials(self.request.session)
+        context = super(DetailView, self).get_context_data(**kwargs)
+        # add this post's responses to the context
+        context['response_list'] = context['post'].response_set.all()
+        return context

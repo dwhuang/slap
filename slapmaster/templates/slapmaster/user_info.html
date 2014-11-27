@@ -1,0 +1,9 @@
+{% if request.session.userid %}
+<div>
+    {{request.session.username}}; <a href="{% url 'logout' %}">登出</a>
+</div>
+{% else %}
+<div>你還沒登入喔~ 
+    <a href="{% url 'fb_login' %}">登入</a>
+</div>
+{% endif %}

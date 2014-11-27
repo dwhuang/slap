@@ -1,9 +1,14 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'slapmaster/style.css' %}">
+
+{% include "slapmaster/user_info.html" %}
+
 <h1>all posts</h1>
 
-{% if all_posts %}
+{% if post_list %}
     <ul>
-    {% for post in all_posts %}
-    <li><a href={% url 'post' post.id %}>id={{post.id}}<br/> 
+    {% for post in post_list %}
+    <li><a href={% url 'post_detail' post.id %}>id={{post.id}}</a><br/> 
     url=<a href="{{post.news_url}}">{{post.news_url}}</a><br/> 
     reason={{post.reason}}<br/> 
     time={{post.time}}<br/>

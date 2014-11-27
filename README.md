@@ -26,7 +26,8 @@ HTML templates used by views.
 
 1. install [Python 2.7 + Django 1.7](https://docs.djangoproject.com/en/1.7/intro/install/). Let's use sqlite for now so no need to install database.
 2. clone this project
-3. `./manage.py migrate`
+3. `pip install authomatic`
+4. `./manage.py migrate`
 
 # Debugging
 
