@@ -1,7 +1,12 @@
 {% if request.session.user %}
 <div>
     <img src="{{request.session.user.picture}}"/>
-    {{request.session.user.name}}; <a href="{% url 'logout' %}">登出</a>
+    {% if request.session.user.show_fb_link %}<a href="{{request.session.user.link}}">{% endif %}{{request.session.user.nickname}}{% if request.session.user.show_fb_link %}</a>
+    {% endif %}
+    &nbsp;|&nbsp;
+    <a href="{% url 'user_prefs' %}">設定</a>
+    &nbsp;|&nbsp;
+    <a href="{% url 'logout' %}">登出</a>
 </div>
 {% else %}
 <div>你還沒登入喔~ 
