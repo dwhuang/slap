@@ -11,6 +11,7 @@
     <li><a href={% url 'post_detail' post.id %}>id={{post.id}}</a><br/> 
     url=<a href="{{post.news_url}}">{{post.news_url}}</a><br/> 
     reason={{post.reason}}<br/> 
+    author={{post.author.nickname}}<br/>
     time={{post.time}}<br/>
     vote={{post.vote}}<br/>
     views={{post.views}}<br/>

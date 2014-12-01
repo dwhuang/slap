@@ -3,6 +3,7 @@
 <h1>post details</h1>
 url=<a href="{{post.news_url}}">{{post.news_url}}</a><br/> 
 reason={{post.reason}}<br/> 
+author={{post.author.nickname}}<br/>
 time={{post.time}}<br/>
 vote={{post.vote}}<br/>
 views={{post.views}}<br/>
@@ -10,14 +11,15 @@ views={{post.views}}<br/>
 <h1>list of responses</h1>
 {% if response_list %}
 <ul>
-   {% for response in response_list %}
-   <li>id={{response.id}}<br/>
-   response_text={{response.response_text}}<br/>
-   upvote={{response.upvote}}<br/>
-   downvote={{response.downvote}}<br/>
-   time={{response.time}}
-   </li>
-   {% endfor %}
+    {% for response in response_list %}
+    <li>id={{response.id}}<br/>
+    response_text={{response.response_text}}<br/>
+    author={{response.author.nickname}}<br/>
+    upvote={{response.upvote}}<br/>
+    downvote={{response.downvote}}<br/>
+    time={{response.time}}
+    </li>
+    {% endfor %}
 </ul>
 {% else %}
    <p>no response so far</p>

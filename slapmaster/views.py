@@ -50,9 +50,8 @@ def fb_login(request):
     user = {'name': result.user.name, 
             'fb_id': result.user.id,
             'email': result.user.email,
-            'link': result.user.link,
-            'picture': "https://graph.facebook.com/%s/picture?type=square" 
-                % result.user.id,
+            'link': make_fb_link(result.user.id),
+            'picture': make_fb_picture_link(result.user.id),
             'credentials': result.user.credentials.serialize(),
             'show_fb_link': u.fb_link,
             'nickname': u.nickname,
@@ -88,6 +87,12 @@ def get_or_create_user(fb_id, nickname):
         User.objects.create(fb_id=fb_id, nickname=nickname)
         u = User.objects.filter(fb_id=fb_id).first()
     return u
+
+def make_fb_link(fb_id):
+    return "https://www.facebook.com/app_scoped_user_id/%s/" % fb_id
+
+def make_fb_picture_link(fb_id):
+    return "https://graph.facebook.com/%s/picture?type=square" % fb_id
 
 class IndexView(generic.ListView):
     model = Post
