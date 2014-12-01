@@ -46,32 +46,32 @@ def fb_login(request):
 
     if not (result.user.name and result.user.id):
         result.user.update()
-    request.session['credentials'] = result.user.credentials.serialize()
-    request.session['username'] = result.user.name
-    request.session['userid'] = result.user.id
-    request.session['useremail'] = result.user.email
+    user = {'name': result.user.name, 
+            'id': result.user.id,
+            'email': result.user.email,
+            'picture': "https://graph.facebook.com/%s/picture?type=square" 
+                % result.user.id,
+            'credentials': result.user.credentials.serialize(),
+           }
+    request.session['user'] = user
     return HttpResponseRedirect(reverse('post_list'))
 
 def logout(request):
-    request.session.pop("credentials", None)
-    request.session.pop("username", None)
-    request.session.pop("userid", None)
-    request.session.pop("useremail", None)
+    request.session.pop("user", None)
     return HttpResponseRedirect(reverse('post_list'))
 
 def validate_user_credentials(session):
-    if not session.has_key('credentials'):
+    if not session.has_key('user'):
         return False
-    credentials = authomatic.credentials(session['credentials'])
+    if not session['user'].has_key('credentials'):
+        return False
+    credentials = authomatic.credentials(session['user']['credentials'])
     if not credentials.valid:
-        session.pop("credentials", None)
-        session.pop("username", None)
-        session.pop("userid", None)
-        session.pop("useremail", None)
+        session.pop("user", None)
         return False
     if credentials.expire_soon(60 * 60 * 24): # expiring in a day
         credentials.refresh()
-        session['credentials'] = credentials.serialize()
+        session['user']['credentials'] = credentials.serialize()
     return True
 
 class IndexView(generic.ListView):
