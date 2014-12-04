@@ -1,5 +1,5 @@
 import sys
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
@@ -7,8 +7,7 @@ from authomatic import Authomatic
 from authomatic.adapters import DjangoAdapter
 
 from slapmaster.models import Post, Response, User
-from slapmaster.config import AUTHOMATIC_CONFIG
-authomatic = Authomatic(AUTHOMATIC_CONFIG, 'gadf48t7vhzv0-42djcajhdslapit')
+from slapmaster.user_session import UserSession
 
 def addpost(request):
     try:
@@ -32,67 +31,12 @@ def addresponse(request):
         return HttpResponse(sys.exc_info()[0])
 
 def fb_login(request):
-    response = HttpResponse()
-    result = authomatic.login(DjangoAdapter(request, response), 'fb')
-    if not result:
-        response.write("cannot get login result")
-        return response
-    if result.error:
-        response.write(result.error.message)
-        return response
-    if not result.user:
-        response.write("login result does not contain user info")
-        return response
-
-    if not (result.user.name and result.user.id):
-        result.user.update()
-    u = get_or_create_user(result.user.id, result.user.name)
-    user = {'name': result.user.name, 
-            'fb_id': result.user.id,
-            'email': result.user.email,
-            'link': make_fb_link(result.user.id),
-            'picture': make_fb_picture_link(result.user.id),
-            'credentials': result.user.credentials.serialize(),
-            'show_fb_link': u.fb_link,
-            'nickname': u.nickname,
-            'reputation': u.reputation,
-           }
-    request.session['user'] = user
-    return HttpResponseRedirect(reverse('post_list'))
+    user_session = UserSession(request)
+    return user_session.login()
 
 def logout(request):
-    request.session.pop("user", None)
-    return HttpResponseRedirect(reverse('post_list'))
-
-def validate_user_credentials(session):
-    """helper function
-    """
-    if not session.has_key('user'):
-        return False
-    if not session['user'].has_key('credentials'):
-        return False
-    credentials = authomatic.credentials(session['user']['credentials'])
-    if not credentials.valid:
-        session.pop("user", None)
-        return False
-    if credentials.expire_soon(60 * 60 * 24): # expiring in a day
-        credentials.refresh()
-        session['user']['credentials'] = credentials.serialize()
-    return True
-
-def get_or_create_user(fb_id, nickname):
-    # check db
-    u = User.objects.filter(fb_id=fb_id).first()
-    if u is None:
-        User.objects.create(fb_id=fb_id, nickname=nickname)
-        u = User.objects.filter(fb_id=fb_id).first()
-    return u
-
-def make_fb_link(fb_id):
-    return "https://www.facebook.com/app_scoped_user_id/%s/" % fb_id
-
-def make_fb_picture_link(fb_id):
-    return "https://graph.facebook.com/%s/picture?type=square" % fb_id
+    user_session = UserSession(request)
+    return user_session.logout()
 
 class IndexView(generic.ListView):
     model = Post
@@ -100,8 +44,8 @@ class IndexView(generic.ListView):
     template_name = 'slapmaster/post_list.html'
 
     def get_context_data(self, **kwargs):
-        validate_user_credentials(self.request.session)
         context = super(IndexView, self).get_context_data(**kwargs)
+        context['user_session'] = UserSession(self.request)
         return context
 
 class DetailView(generic.DetailView):
@@ -110,34 +54,33 @@ class DetailView(generic.DetailView):
     template_name = 'slapmaster/post_detail.html'
 
     def get_context_data(self, **kwargs):
-        validate_user_credentials(self.request.session)
         context = super(DetailView, self).get_context_data(**kwargs)
+        context['user_session'] = UserSession(self.request)
         # add this post's responses to the context
         context['response_list'] = context['post'].response_set.all()
         return context
 
-def user_prefs(request):
-    if not validate_user_credentials(request.session):
-        return HttpResponseRedirect(reverse('post_list'))
-    u = get_or_create_user(request.session['user']['fb_id'], None)
-    if u is None:
-        return HttpResponseRedirect(reverse('post_list'))
-    db_userinfo = {'fb_link': u.fb_link, 'nickname': u.nickname,
-            'reputation': u.reputation}
-    context = dict(request.session['user'].items() + db_userinfo.items())
-    return render(request, 'slapmaster/user_prefs.html', context)
+class UserPrefsView(generic.TemplateView):
+    template_name = 'slapmaster/user_prefs.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.user_session = UserSession(request)
+        if not self.user_session.validate():
+            return redirect('post_list')
+        return super(UserPrefsView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserPrefsView, self).get_context_data(**kwargs)
+        context['user_session'] = self.user_session
+        return context
 
 def user_prefs_save(request):
-    show_fb_link = True if request.POST.has_key('fb_link') else False
+    show_fb_url = True if request.POST.has_key('show_fb_url') else False
     nickname = request.POST['nickname']
-    u = get_or_create_user(request.session['user']['fb_id'], None)
-    u.fb_link = show_fb_link
-    u.nickname = nickname
-    u.save()
-    request.session['user']['show_fb_link'] = show_fb_link
-    request.session['user']['nickname'] = nickname
-    # refresh session dict
-    request.session['refresh'] = 1
-    request.session.pop('refresh', 1)
-    
+
+    user_session = UserSession(request)
+    user_session.show_fb_url = show_fb_url
+    user_session.nickname = nickname
     return HttpResponseRedirect(reverse('post_list'))
+
+

@@ -1,7 +1,7 @@
-{% if request.session.user %}
+{% if user_session.validate %}
 <div>
-    <img src="{{request.session.user.picture}}"/>
-    {% if request.session.user.show_fb_link %}<a href="{{request.session.user.link}}">{% endif %}{{request.session.user.nickname}}{% if request.session.user.show_fb_link %}</a>
+    <img src="{{user_session.fb_pic_url}}"/>
+    {% if user_session.show_fb_url %}<a href="{{user_session.fb_url}}">{% endif %}{{user_session.nickname}}{% if user_session.show_fb_url %}</a>
     {% endif %}
     &nbsp;|&nbsp;
     <a href="{% url 'user_prefs' %}">設定</a>

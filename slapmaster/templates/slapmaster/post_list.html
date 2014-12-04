@@ -11,7 +11,7 @@
     <li><a href={% url 'post_detail' post.id %}>id={{post.id}}</a><br/> 
     url=<a href="{{post.news_url}}">{{post.news_url}}</a><br/> 
     reason={{post.reason}}<br/> 
-    author={{post.author.nickname}}<br/>
+    author={% if post.author.show_fb_url %}<a href="{{post.author.fb_url}}">{% endif %}{{post.author.nickname}}{% if post.author.show_fb_url %}</a>{% endif %}<br/>
     time={{post.time}}<br/>
     vote={{post.vote}}<br/>
     views={{post.views}}<br/>

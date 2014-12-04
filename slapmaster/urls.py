@@ -10,6 +10,6 @@ urlpatterns = patterns('',
     url(r'^addresponse/$', views.addresponse, name='addresponse'),
     url(r'^fb_login/$', views.fb_login, name='fb_login'),
     url(r'^logout/$', views.logout, name='logout'),
-    url(r'^user_prefs/$', views.user_prefs, name='user_prefs'),
+    url(r'^user_prefs/$', views.UserPrefsView.as_view(), name='user_prefs'),
     url(r'^user_prefs/save$', views.user_prefs_save, name='user_prefs_save'),
 )

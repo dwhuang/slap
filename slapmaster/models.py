@@ -21,6 +21,14 @@ class Response(models.Model):
 class User(models.Model):
     id = models.AutoField(primary_key=True)
     fb_id = models.CharField(max_length=32)
-    fb_link = models.BooleanField(default=True)
+    show_fb_url = models.BooleanField(default=True)
     nickname = models.CharField(max_length=32)
     reputation = models.IntegerField(default=0)
+
+    @property
+    def fb_url(self):
+        return "https://www.facebook.com/app_scoped_user_id/%s/" % self.fb_id
+
+    @property
+    def fb_pic_url(self):
+        return "https://graph.facebook.com/%s/picture?type=square" % self.fb_id
