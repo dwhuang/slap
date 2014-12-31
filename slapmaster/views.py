@@ -1,12 +1,12 @@
 import sys
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from django.views import generic
 from authomatic import Authomatic
 from authomatic.adapters import DjangoAdapter
 
-from slapmaster.models import Post, Response, User
+from slapmaster.models import Post, Response, User, PostVote
 from slapmaster.user_session import UserSession
 
 def addpost(request):
@@ -83,4 +83,30 @@ def user_prefs_save(request):
     user_session.nickname = nickname
     return HttpResponseRedirect(reverse('post_list'))
 
+def votepost(request, pk, vote):
+    post = Post.objects.get(pk=pk)
+    user = UserSession(request).user
+    if not user:
+        # user is not logged in
+        return HttpResponseRedirect(reverse('post_list'))
+    # check that the user has not already voted the post
+    if user.voted_post.filter(id=pk).count() > 0:
+        # user has already voted for this post
+        return HttpResponseRedirect(reverse('post_list'))
+    power = 0
+    if vote == 'up':
+        power = 1
+        post.upvote += 1 
+        post.save(update_fields=['upvote'])
+    elif vote == 'down':
+        power = -1
+        post.downvote += 1
+        post.save(update_fields=['downvote'])
+    if power == 0:
+        # neither voted up nor down 
+        # (should not happen if urls.py is configured properly)
+        raise Http404
+
+    PostVote.objects.create(post=post, user=user, power=power)
+    return HttpResponseRedirect(reverse('post_list'))
 

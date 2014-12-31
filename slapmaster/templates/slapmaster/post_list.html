@@ -13,7 +13,8 @@
     reason={{post.reason}}<br/> 
     author={% if post.author.show_fb_url %}<a href="{{post.author.fb_url}}">{% endif %}{{post.author.nickname}}{% if post.author.show_fb_url %}</a>{% endif %}<br/>
     time={{post.time}}<br/>
-    vote={{post.vote}}<br/>
+    upvote={{post.upvote}} <a href={% url 'votepost' post.id 'up' %}>vote</a><br/>
+    downvote={{post.downvote}} <a href={% url 'votepost' post.id 'down' %}>vote</a><br/>
     views={{post.views}}<br/>
     </li>
     {% endfor %}

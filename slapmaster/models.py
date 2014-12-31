@@ -4,7 +4,8 @@ class Post(models.Model):
     id = models.AutoField(primary_key=True)
     news_url = models.URLField(max_length=1024)
     reason = models.CharField(max_length=1024)
-    vote = models.PositiveIntegerField(default=0)
+    upvote = models.PositiveIntegerField(default=0)
+    downvote = models.PositiveIntegerField(default=0)
     views = models.PositiveIntegerField(default=0)
     time = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey('User')
@@ -24,6 +25,8 @@ class User(models.Model):
     show_fb_url = models.BooleanField(default=True)
     nickname = models.CharField(max_length=32)
     reputation = models.IntegerField(default=0)
+    voted_post = models.ManyToManyField(Post, related_name='voter_set', 
+            symmetrical=False, through='PostVote')
 
     @property
     def fb_url(self):
@@ -32,3 +35,9 @@ class User(models.Model):
     @property
     def fb_pic_url(self):
         return "https://graph.facebook.com/%s/picture?type=square" % self.fb_id
+
+class PostVote(models.Model):
+    id = models.AutoField(primary_key=True)
+    post = models.ForeignKey(Post)
+    user = models.ForeignKey(User)
+    power = models.SmallIntegerField()

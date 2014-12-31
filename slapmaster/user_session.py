@@ -84,53 +84,50 @@ class UserSession(object):
         return True
 
     @property
+    def user(self):
+        return User.objects.filter(fb_id=self.session['fb_id']).first()
+
+    @property
     def fb_pic_url(self):
-        user = User.objects.filter(fb_id=self.session['fb_id']).first()
-        if user:
-            return user.fb_pic_url
+        if self.user:
+            return self.user.fb_pic_url
         return ''
 
     @property
     def fb_url(self):
-        user = User.objects.filter(fb_id=self.session['fb_id']).first()
-        if user:
-            return user.fb_url
+        if self.user:
+            return self.user.fb_url
         return ''
 
     @property
     def show_fb_url(self):
-        user = User.objects.filter(fb_id=self.session['fb_id']).first()
-        if user:
-            return user.show_fb_url
+        if self.user:
+            return self.user.show_fb_url
         return ''
 
     @show_fb_url.setter
     def show_fb_url(self, value):
-        user = User.objects.filter(fb_id=self.session['fb_id']).first()
-        if user:
-            user.show_fb_url = value
-            user.save(update_fields=['show_fb_url'])
+        if self.user:
+            self.user.show_fb_url = value
+            self.user.save(update_fields=['show_fb_url'])
 
     @property
     def nickname(self):
-        user = User.objects.filter(fb_id=self.session['fb_id']).first()
-        if user:
-            return user.nickname
+        if self.user:
+            return self.user.nickname
         return ''
 
     @nickname.setter
     def nickname(self, value):
         if not value:
             return
-        user = User.objects.filter(fb_id=self.session['fb_id']).first()
-        if user:
-            user.nickname = value
-            user.save(update_fields=['nickname'])
+        if self.user:
+            self.user.nickname = value
+            self.user.save(update_fields=['nickname'])
 
     @property
     def reputation(self):
-        user = User.objects.filter(fb_id=self.session['fb_id']).first()
-        if user:
-            return user.reputation
+        if self.user:
+            return self.user.reputation
         return ''
 
